@@ -1,0 +1,79 @@
+# 視線オーバーレイの設定
+# 書かなかった項目は既定値(src/gaze_overlay/config.py)になる。変更したら gaze-overlay を再起動する。
+# 平滑化のプリセット、表示のオン/オフ、座標の基準は実行中に切り替えられ、data/state.json に保存される。
+
+[camera]
+# VMagicMirror とカメラを共有するため、NVIDIA Broadcast の仮想カメラを読む。
+# (Windowsのマルチアプリカメラは、VMagicMirror や OBS の映像キャプチャデバイスのような
+#  DirectShow のアプリとは共有できないことを確認したため)
+# NVIDIA Broadcast の仮想カメラは出力解像度(1920x1080)と同じ解像度を要求しないと黒い画像になる
+name = "Camera (NVIDIA Broadcast)"
+width = 1920
+height = 1080
+fps = 30
+# これより大きいフレームは縮小してから推論する。1920 なら1080pのまま推論する。
+# 640幅だと顔が約140pxになり、MediaPipeの入力(256x256)より小さくなるため1080pのままにしている。
+# 処理時間は 1080p 約11ms / 640幅 約8ms(実測)。精度の差はキャリブレーションの検証誤差で比べる
+process_width = 1080
+
+# 物理カメラを直接開く場合(他のアプリと共有しないとき)は、name を消して次のようにする
+# name = ""
+# index = 0
+# backend = "msmf"
+# width = 640
+# height = 480
+
+[tracker]
+# 目の開き具合が「開いているときの基準 × この比率」を下回ったら瞬きとみなす
+blink_threshold_ratio = 0.6
+# 瞬き判定が long_blink_ms 以上続いても、基準 × closed_floor_ratio より開いていれば
+# 画面の下を見ているとみなして追跡を続ける
+closed_floor_ratio = 0.35
+long_blink_ms = 400
+idle_fps = 5         # オーバーレイが非表示・未接続のときの推論FPS
+
+[smoothing]
+preset = "balance"   # "stable"(安定) / "balance"(バランス) / "responsive"(追従)
+
+# プリセットの値を変える場合(単位はモニターのpx)
+# [smoothing.presets.balance]
+# min_cutoff = 0.5   # 小さいほど、じっと見ているときのブレが減る(遅れは増える)
+# beta = 0.001       # 大きいほど、速く動いたときの遅れが減る(ブレは増える)
+
+[calibration]
+monitor = "primary"  # キャリブレーションするモニター。"primary"、番号、または "\\.\DISPLAY3"
+auto_calibrate_if_missing = true
+
+[target]
+mode = "window"      # "window"(ゲームウィンドウ追従)または "monitor"(モニター全体)
+monitor = "primary"
+fallback = "hide"    # 対象のウィンドウがないとき: "hide"(消す)または "monitor"(モニター全体)
+# 追従するゲームのexe名(fnmatchのパターン、大文字小文字は区別しない)。書くと既定のリストを置き換える
+# patterns = ["th[0-9]*.exe", "th_*.exe", "xenia_canary.exe"]
+
+# クライアント領域とOBSのキャプチャ範囲がずれるゲームの補正 [左, 上, 右, 下](px、内側が正)
+[target.insets]
+# "xenia_canary.exe" = [0, 0, 0, 0]
+
+[server]
+host = "127.0.0.1"
+port = 8765
+
+[hotkeys]
+enabled = true
+
+[hotkeys.bindings]
+cycle_preset = "ctrl+alt+f7"       # 平滑化のプリセットを順に切り替える
+pick_foreground = "ctrl+alt+f8"    # 前面のウィンドウを対象にする
+toggle_visible = "ctrl+alt+f9"     # バブルの表示を切り替える(推論は続ける)
+pause = "ctrl+alt+f10"             # 一時停止/再開(推論を止める)
+calibrate_quick = "ctrl+alt+f11"   # クイック補正(5点)。実行中にもう一度押すと中止
+calibrate_full = "ctrl+alt+shift+f11"  # フルキャリブレーション(9点+検証4点)
+offset = "ctrl+alt+f12"            # 1点オフセット補正
+
+[ui]
+tray = true
+font = "Yu Gothic UI"
+
+[log]
+level = "INFO"

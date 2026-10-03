@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>視線オーバーレイ</title>
+<link rel="stylesheet" href="/static/dock.css">
+</head>
+<body>
+<!-- OBSの「ドック」→「カスタムブラウザドック」に http://127.0.0.1:8765/dock を追加して使う -->
+<header>
+  <span id="badge" class="badge">未接続</span>
+  <span id="perf" class="muted"></span>
+</header>
+
+<section class="row">
+  <button data-cmd="toggle_visible" id="btn-visible">表示</button>
+  <button data-cmd="pause" id="btn-pause">一時停止</button>
+  <button data-cmd="set_mode" id="btn-mode">対象: ウィンドウ</button>
+</section>
+
+<section class="row">
+  <button data-cmd="offset" title="対象の中央の点を約1.5秒見る">1点補正</button>
+  <button data-cmd="calibrate_quick" title="対象の中央と四隅の点を約7秒見る">クイック補正</button>
+  <button data-cmd="calibrate_full" title="モニター全体で9点+検証4点(約25秒)">フル</button>
+</section>
+
+<section class="row" id="presets"></section>
+
+<section class="row">
+  <button data-cmd="pick_foreground" data-value="3" title="押してから3秒以内にゲームをクリックすると、そのウィンドウを対象に固定する(ホットキーならすぐに固定できる)">前面ウィンドウを対象に(3秒後)</button>
+</section>
+
+<dl id="info">
+  <dt>対象</dt><dd id="target">-</dd>
+  <dt>頭の位置</dt><dd><div class="meter"><div id="drift-bar"></div></div><span id="drift" class="muted"></span></dd>
+  <dt>キャリブ</dt><dd id="calib">-</dd>
+  <dt>目</dt><dd id="eye">-</dd>
+  <dt>カメラ</dt><dd id="camera">-</dd>
+  <dt>ホットキー</dt><dd id="hotkeys">-</dd>
+</dl>
+<div id="warnings"></div>
+
+<script src="/static/dock.js"></script>
+</body>
+</html>

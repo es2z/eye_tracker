@@ -1,0 +1,33 @@
+[project]
+name = "gaze-overlay"
+version = "0.1.0"
+description = "Webカメラの視線推定をOBSのブラウザソースにバブルとして重ねるツール"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+  "eyetrax==0.4.0",
+  "mediapipe>=1.0.1,<2",
+  "numpy>=2.3",
+  "websockets>=15",
+  "screeninfo>=0.8",
+  "pystray>=0.19",
+  "pillow>=11",
+  # DirectShowのカメラ名の一覧(NVIDIA Broadcastの仮想カメラを名前で選ぶため)
+  "pygrabber>=0.2",
+]
+
+[project.scripts]
+gaze-overlay = "gaze_overlay.app:main"
+
+[build-system]
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv]
+override-dependencies = [
+  # eyetraxのnumpy<2制約を解除する(Python 3.14用のnumpy 1.xホイールがないため。動作は確認済み)
+  "numpy>=2",
+  # mediapipeが要求するopencv-contrib-pythonとcv2モジュールが衝突するため除外する
+  "opencv-python; sys_platform == 'never'",
+  # eyetraxの仮想カメラ機能は使わない(OBSの仮想カメラと競合する可能性があるため)
+  "pyvirtualcam; sys_platform == 'never'",
+]

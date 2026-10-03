@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Gaze Overlay</title>
+<link rel="stylesheet" href="/static/overlay.css">
+</head>
+<body>
+<!--
+  OBSのブラウザソース用。背景は塗らない(OBS既定のカスタムCSSで透過になる)。
+  見た目はURLパラメータで変える。例: /overlay?size=0.15&color=ff4fa3&opacity=0.8
+  パラメータの一覧は overlay.js の先頭を参照。
+-->
+<div id="stage"></div>
+<div id="debug" hidden></div>
+<script src="/static/overlay.js"></script>
+</body>
+</html>

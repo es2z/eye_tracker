@@ -1,0 +1,102 @@
+:root {
+  --bg: #1f2128;
+  --panel: #2b2e38;
+  --panel-hover: #353946;
+  --border: #3c4050;
+  --text: #e6e6e6;
+  --muted: #9aa0ad;
+  --accent: #4f8cff;
+  --ok: #3ddc84;
+  --warn: #ffc400;
+  --bad: #ff5c5c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.45 "Yu Gothic UI", "Meiryo", sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--panel);
+  font-weight: bold;
+}
+
+.badge.ok { background: #1f5f3d; }
+.badge.warn { background: #6b5200; }
+.badge.bad { background: #6e2525; }
+
+.muted {
+  color: var(--muted);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+button {
+  flex: 1 1 auto;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover { background: var(--panel-hover); }
+button.on { border-color: var(--accent); background: #2a3d66; }
+button:disabled { opacity: 0.5; cursor: default; }
+
+dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  margin: 8px 0 0;
+}
+
+dt { color: var(--muted); }
+dd { margin: 0; overflow-wrap: anywhere; }
+
+.meter {
+  display: inline-block;
+  width: 90px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 4px;
+  background: var(--panel);
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+#drift-bar {
+  width: 0;
+  height: 100%;
+  background: var(--ok);
+}
+
+#warnings div {
+  margin-top: 6px;
+  padding: 4px 6px;
+  border-left: 3px solid var(--warn);
+  background: #3a3320;
+}
